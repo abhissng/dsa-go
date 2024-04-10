@@ -26,9 +26,8 @@ build-run:
 
 # Run target
 run:
-	$(GORUN) $(SOURCE_FILE)
 	@echo "Running" 
+	$(GORUN) $(SOURCE_FILE)
 	
-
 # .PHONY rule to avoid conflicts with filenames
 .PHONY: all build clean build-run
