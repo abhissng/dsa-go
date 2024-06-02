@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/abhissng/dsa-go/mathematics"
+	"github.com/abhissng/dsa-go/question"
 )
 
 func main() {
@@ -11,4 +12,5 @@ func main() {
 
 	// Chapters runner
 	mathematics.Init()
+	question.Init()
 }

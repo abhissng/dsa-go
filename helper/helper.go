@@ -22,8 +22,8 @@ func Execute(inputFunc any, args ...any) {
 	// Prepare arguments
 	in := make([]reflect.Value, len(args))
 	for i, arg := range args {
-		in[i] = castVariableType(arg)
-
+		// in[i] = castVariableType(arg)
+		in[i] = reflect.ValueOf(arg)
 	}
 	fmt.Println()
 	fmt.Println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+ | " + getFunctionName(inputFunc) + " | -+-+-+-+-+-+-+-+-+-+-+-+-+-+")
@@ -40,9 +40,9 @@ func Execute(inputFunc any, args ...any) {
 	// Print the result (if any)
 	for _, r := range result {
 		fmt.Printf("Output : ")
-		fmt.Printf("%+v\n", r.Interface())
+		fmt.Printf("%+v ", r.Interface())
 	}
-	fmt.Printf("Execution latency time : %s\n", latency)
+	fmt.Printf("\nExecution latency time : %s\n", latency)
 }
 func startLatency() time.Time {
 	return time.Now()
@@ -74,6 +74,7 @@ func getFunctionName(f interface{}) string {
 	return funcName
 }
 
+/*
 // this is to cast the value of int and float32 so that reflect does not throw any exception
 func castVariableType(value interface{}) reflect.Value {
 	valueRef := reflect.ValueOf(value)
@@ -83,7 +84,30 @@ func castVariableType(value interface{}) reflect.Value {
 		return reflect.ValueOf(int64(valueRef.Int()))
 	case reflect.Float32:
 		return reflect.ValueOf(float64(valueRef.Float()))
+	case reflect.Slice:
+		fmt.Println("here",reflect.ValueOf(valueRef))
+		// Handle slice conversion
+		if valueRef.Type().Elem().Kind() == reflect.Int {
+			// Convert []int to []int64
+			newSlice := reflect.MakeSlice(reflect.SliceOf(reflect.TypeOf(int64(0))), valueRef.Len(), valueRef.Cap())
+			for i := 0; i < valueRef.Len(); i++ {
+				newSlice.Index(i).Set(reflect.ValueOf(int64(valueRef.Index(i).Int())))
+			}
+			return newSlice
+		}
+
 	default:
 		return valueRef
 	}
+	return valueRef
+
+}
+*/
+
+// Abs returns the absolute value of x.
+func Abs(x int64) int64 {
+	if x < 0 {
+		return -x
+	}
+	return x
 }
