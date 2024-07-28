@@ -2,27 +2,7 @@ package mathematics
 
 import (
 	"math"
-
-	"github.com/abhissng/dsa-go/helper"
 )
-
-func Init() {
-	helper.Execute(countDigits, 1234)
-	helper.Execute(isPalindrome, 78987)
-	helper.Execute(factorial, 20)
-	helper.Execute(naiveTrailingZero, 20)
-	helper.Execute(efficientTrailingZero, 20)
-	helper.Execute(naiveGreatestCommonDivisor, 10, 15)
-	helper.Execute(EfficientGreatestCommonDivisor, 12, 15)
-	helper.Execute(leastCommonDivisor, 4, 6)
-	helper.Execute(EfficientLeastCommonDivisor, 4, 6)
-	helper.Execute(naiveCheckPrime, 1031)
-	helper.Execute(betterCheckPrime, 1031)
-	helper.Execute(EfficientCheckPrime, 1031)
-	helper.Execute(naiveGetDivisors, 25)
-	helper.Execute(EfficientGetDivisor, 25)
-
-}
 
 // counts the digit in a number
 func countDigits(num int) int {
@@ -67,7 +47,7 @@ func naiveTrailingZero(val int) int {
 
 // Efficient CountTrailing zero
 func efficientTrailingZero(val int) int {
-	res :=0
+	res := 0
 	for i := 5; i <= val; i = i * 5 {
 		res = res + (val / i)
 	}
@@ -166,7 +146,7 @@ func EfficientCheckPrime(n int) bool {
 	return true
 }
 
-func naiveGetDivisors(n int) []int{
+func naiveGetDivisors(n int) []int {
 	arr := make([]int, 0)
 	arr = append(arr, 1)
 	// fmt.Printf("%d ", 1)

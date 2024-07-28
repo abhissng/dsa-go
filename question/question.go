@@ -16,4 +16,10 @@ func Init() {
 		{"Go", "Javascript"},
 	}
 	helper.Execute(easy.TournamentWinner, competitions, []int{0, 0, 1})
+	helper.Execute(easy.NonConstructibeChange, []int{5, 7, 1, 1, 2, 3, 22})
+	helper.Execute(easy.TransposeMatrix, [][]int{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9},
+	})
 }
