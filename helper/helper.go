@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"reflect"
 	"runtime"
+	"sort"
 	"strings"
 	"time"
-
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 func Execute(inputFunc any, args ...any) {
@@ -27,6 +25,12 @@ func Execute(inputFunc any, args ...any) {
 	}
 	fmt.Println()
 	fmt.Println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+ | " + getFunctionName(inputFunc) + " | -+-+-+-+-+-+-+-+-+-+-+-+-+-+")
+
+	for i, a := range args {
+		fmt.Printf("Input %d: ", i+1)
+		fmt.Printf("%+v\n", a)
+	}
+
 	now := startLatency()
 
 	// Call the function with provided arguments
@@ -34,13 +38,10 @@ func Execute(inputFunc any, args ...any) {
 
 	latency := checkLatency(now)
 
-	fmt.Printf("Input : ")
-	fmt.Printf("%+v\n", args)
-
 	// Print the result (if any)
 	for _, r := range result {
-		fmt.Printf("Output : ")
-		fmt.Printf("%+v ", r.Interface())
+		fmt.Printf("Output: ")
+		fmt.Printf("%+v\n", r.Interface())
 	}
 	fmt.Printf("\nExecution latency time : %s\n", latency)
 }
@@ -55,22 +56,18 @@ func checkLatency(t time.Time) time.Duration {
 func getFunctionName(f interface{}) string {
 	// Get the name of the function from its runtime representation
 	fullName := runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name()
-	// Extract just the function name
-	lastSlashIndex := len(fullName) - 1
-	for lastSlashIndex >= 0 && fullName[lastSlashIndex] != '/' {
-		lastSlashIndex--
-	}
-	// Format the function name
-	var funcName string
-	splitName := strings.Split(fullName[lastSlashIndex+1:], ".")
-	caser := cases.Title(language.Und)
-	if len(splitName) == 2 {
-		splitName[0] = caser.String(splitName[0])
-		funcName = strings.Join(splitName, ".")
-	} else {
-		funcName = caser.String(fullName[lastSlashIndex+1:])
-	}
 
+	split := strings.Split(fullName, "/")
+
+	var funcName string
+	for i := 3; i < len(split); i++ {
+		if strings.Contains(split[i], ".") {
+			funcSplit := strings.Split(split[i], ".")
+			funcName += funcSplit[0] + " -> " + funcSplit[1]
+		} else {
+			funcName += split[i] + " -> "
+		}
+	}
 	return funcName
 }
 
@@ -110,4 +107,43 @@ func Abs(x int64) int64 {
 		return -x
 	}
 	return x
+}
+
+// SwapArr Swap the value of using high and low value.
+func SwapArr(arr []int, low, high int) []int {
+	temp := arr[low]
+	arr[low] = arr[high]
+	arr[high] = temp
+	return arr
+}
+
+type Number interface {
+	int | int64
+}
+
+// Max gives the maximum between two integer values
+func Max[T Number](a, b T) T {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// Min gives the minimum between two integer values
+func Min[T Number](a, b T) T {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func SortString(s string) string {
+	// convert string to rune so that we can compare the rune value as rune is int32
+	runes := []rune(s)
+
+	sort.Slice(runes, func(i, j int) bool {
+		// in ascending order
+		return runes[i] < runes[j]
+	})
+	return string(runes)
 }

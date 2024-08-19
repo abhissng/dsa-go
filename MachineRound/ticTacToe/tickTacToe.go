@@ -87,8 +87,8 @@ func Init() {
 
 	gameBoard.print()
 
-	for{
-		var row col int
+	for {
+		var row, col int
 		var move string
 
 		row--
